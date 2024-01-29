@@ -1,6 +1,7 @@
 package utils;
 
 import db.Database;
+import http.constants.Path;
 import model.Session;
 import model.User;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class HtmlEditor {
     }
 
     public static byte[] listLoginUser() throws IOException {
-        byte[] listHtml = FileLoader.loadFileContent("/user/list.html", "html");
+        byte[] listHtml = FileLoader.loadFileContent(Path.USER_LIST, "html");
         String listPage = new String(listHtml);
         List<Session> sessionList = Database.findAllValidSession();
         String userList = makeUserList(sessionList);
@@ -37,11 +38,10 @@ public class HtmlEditor {
 
     private static String makeUserList(List<Session> sessionList) {
         StringBuilder userList = new StringBuilder();
-        logger.debug("session number : {}", sessionList.size());
-        for (int number = 1; number < sessionList.size(); number++) {
+        for (int number = 0; number < sessionList.size(); number++) {
             String userLine = LIST_FRAME;
-            User user = sessionList.get(number - 1).getUser();
-            userLine = userLine.replace("number", Integer.toString(number));
+            User user = sessionList.get(number).getUser();
+            userLine = userLine.replace("number", Integer.toString(number+1));
             userLine = userLine.replace("userId", user.getUserId());
             userLine = userLine.replace("userName", user.getName());
             userLine = userLine.replace("email", user.getEmail());
