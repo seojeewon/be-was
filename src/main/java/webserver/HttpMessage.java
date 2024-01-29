@@ -24,22 +24,22 @@ public class HttpMessage {
     }
 
     public String getRequestInfo() {
-        return "[Method: " + httpMessage.get("Method") + ", "
-                + "Path: " + httpMessage.get("Path") + ", "
-                + "Accept: " + httpMessage.get("Accept") + "]";
+        return "[Method: " + getMethod() + ", "
+                + "Path: " + getPath() + ", "
+                + "Accept: " + getAccept() + "]";
     }
 
     public String getMethod() {
-        return httpMessage.get("Method");
+        return httpMessage.get(HttpHeaders.METHOD);
     }
 
     public String getAccept() {
-        String[] acceptList = httpMessage.get("Accept").split(",");
+        String[] acceptList = httpMessage.get(HttpHeaders.ACCEPT).split(",");
         return acceptList[0];
     }
 
     public String getPath() {
-        return httpMessage.get("Path");
+        return httpMessage.get(HttpHeaders.PATH);
     }
 
     public String getMimeType() {
@@ -56,11 +56,7 @@ public class HttpMessage {
     }
 
     public String getSetCookie(){
-        return httpMessage.get("Set-Cookie");
-    }
-
-    public String getExpires(){
-        return httpMessage.get("expires");
+        return httpMessage.get(HttpHeaders.SET_COOKIE);
     }
 
     public LoginInfo getLoginDto(){
@@ -79,19 +75,23 @@ public class HttpMessage {
     }
 
     public String getLocation(){
-        return httpMessage.get("Location");
+        return httpMessage.get(HttpHeaders.LOCATION);
+    }
+
+    public String getContentType(){
+        return httpMessage.get(HttpHeaders.CONTENT_TYPE);
     }
 
     public String getCookie(){
-        String cookie = httpMessage.get("Cookie");
+        String cookie = httpMessage.get(HttpHeaders.COOKIE);
         if(cookie==null) return null;
-        String[] cookiePart = httpMessage.get("Cookie").split("=");
+        String[] cookiePart = cookie.split("=");
         return cookiePart[1];
     }
 
     public String getResponseInfo() {
-        return "[Status: " + httpMessage.get("Status-Code") + ", "
-                + "Content-Type: " + httpMessage.get("Accept") + "]";
+        return "[Status: " + httpMessage.get(HttpHeaders.STATUS_CODE) + ", "
+                + "Content-Type: " + getContentType() + "]";
     }
 
     public User getUserInfo() {

@@ -1,5 +1,7 @@
 package webserver;
 
+import http.HttpHeaders;
+import http.StatusCode;
 import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,12 @@ public enum GetType implements MethodType{
             //쿠키로 유효한 세션 아이디를 넘겨주는 경우 index.html에 사용자 이름 표시하고 로그인 버튼 없애기
             Session session = UserService.isValidSession(request);
             Map<String, String> responseInfo = new HashMap<>();
-            responseInfo.put("HTTP version", request.getHttpVersion());
-            responseInfo.put("Accept", request.getAccept());
+            responseInfo.put(HttpHeaders.HTTP_VERSION, request.getHttpVersion());
+            responseInfo.put(HttpHeaders.CONTENT_TYPE, request.getAccept());
             if(session!=null){
                 byte[] body = HtmlEditor.includeUserNameOnHomePage(session.getUser().getName());
-                responseInfo.put("Content-Length", Integer.toString(body.length));
-                responseInfo.put("Status-Code", "200 OK");
+                responseInfo.put(HttpHeaders.CONTENT_LENGTH, Integer.toString(body.length));
+                responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.OK);
                 return new HttpMessage(responseInfo, body);
             }
             //쿠키 없이 요청이 오거나 유효하지 않은 세션 아이디인 경우 변형 없는 index.html 반환
@@ -37,11 +39,11 @@ public enum GetType implements MethodType{
         @Override
         public HttpMessage service(HttpMessage request) throws IOException{
             Map<String, String> responseInfo = new HashMap<>();
-            responseInfo.put("HTTP version", request.getHttpVersion());
-            responseInfo.put("Accept", request.getAccept());
+            responseInfo.put(HttpHeaders.HTTP_VERSION, request.getHttpVersion());
+            responseInfo.put(HttpHeaders.CONTENT_TYPE, request.getAccept());
             byte[] body = HtmlEditor.listLoginUser();
-            responseInfo.put("Content-Length", Integer.toString(body.length));
-            responseInfo.put("Status-Code", "200 OK");
+            responseInfo.put(HttpHeaders.CONTENT_LENGTH, Integer.toString(body.length));
+            responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.OK);
             return new HttpMessage(responseInfo, body);
         }
     },
@@ -49,19 +51,19 @@ public enum GetType implements MethodType{
         @Override
         public HttpMessage service(HttpMessage request) throws IOException {
             Map<String, String> responseInfo = new HashMap<>();
-            responseInfo.put("HTTP version", request.getHttpVersion());
-            responseInfo.put("Accept", request.getAccept());
+            responseInfo.put(HttpHeaders.HTTP_VERSION, request.getHttpVersion());
+            responseInfo.put(HttpHeaders.CONTENT_TYPE, request.getAccept());
             byte[] body;
             try{
                 body = FileLoader.loadFileContent(request.getPath(), request.getMimeType());
-                responseInfo.put("Content-Length", Integer.toString(body.length));
+                responseInfo.put(HttpHeaders.CONTENT_LENGTH, Integer.toString(body.length));
             } catch (IOException e){    //없는 페이지 요청시 404 에러
                 logger.error("Fault Page Request : {}", request.getPath());
-                responseInfo.put("Status-Code", "404 NOT FOUND");
+                responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.NOT_FOUND);
                 body = FileLoader.loadFileContent("/error/not_found.html","html");
                 return new HttpMessage(responseInfo, body);
             }
-            responseInfo.put("Status-Code", "200 OK");
+            responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.OK);
             return new HttpMessage(responseInfo, body);
         }
     }

@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
 //            dos.writeBytes("Content-Length: " + responseMessage.getResponseBody().length + "\r\n\r\n");
 //            dos.write(responseMessage.body);
 //            dos.flush();
-            ResponseStatusCode.findByStatus(responseMessage.getStatusCode()).writer(dos, response);
+            ResponseStatusType.findByStatus(responseMessage.getStatusCode()).writer(dos, response);
 
         } catch (IOException e) {
             logger.error(e.getMessage());

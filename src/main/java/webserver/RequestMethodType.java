@@ -1,5 +1,7 @@
 package webserver;
 
+import http.HttpHeaders;
+import http.StatusCode;
 import utils.FileLoader;
 
 import java.io.IOException;
@@ -17,9 +19,9 @@ public enum RequestMethodType {
             catch (Exception e){
                 System.out.println("Error while POST: " + e.getMessage());
                 Map<String, String> responseInfo = new HashMap<>();
-                responseInfo.put("HTTP version", request.getHttpVersion());
-                responseInfo.put("Accept", request.getAccept());
-                responseInfo.put("Status-Code", "500 Internal Server Error");
+                responseInfo.put(HttpHeaders.HTTP_VERSION, request.getHttpVersion());
+                responseInfo.put(HttpHeaders.ACCEPT, request.getAccept());
+                responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.INTERNAL_SERVER_ERROR);
                 byte[] body = FileLoader.loadFileContent("/error/internal_server_error.html","html");
                 return new HttpMessage(responseInfo, body);
                  //예외 발생하면 서버에러 코드
@@ -36,9 +38,9 @@ public enum RequestMethodType {
             catch (Exception e){
                 System.out.println("Error while GET: " + e.getMessage());
                 Map<String, String> responseInfo = new HashMap<>();
-                responseInfo.put("HTTP version", request.getHttpVersion());
-                responseInfo.put("Accept", request.getAccept());
-                responseInfo.put("Status-Code", "500 Internal Server Error");
+                responseInfo.put(HttpHeaders.HTTP_VERSION, request.getHttpVersion());
+                responseInfo.put(HttpHeaders.ACCEPT, request.getAccept());
+                responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.INTERNAL_SERVER_ERROR);
                 byte[] body = FileLoader.loadFileContent("/error/internal_server_error.html","html");
                 return new HttpMessage(responseInfo, body);
             }

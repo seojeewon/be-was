@@ -8,4 +8,7 @@ public class HttpHeaders {
     public static String STATUS_CODE = "Status-Code";
     public static String CONTENT_TYPE = "Content-Type";
     public static String LOCATION = "Location";
+    public static String ACCEPT = "Accept";
+    public static String SET_COOKIE = "Set-Cookie";
+    public static String COOKIE = "Cookie";
 }
