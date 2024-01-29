@@ -1,46 +1,53 @@
 package utils;
 
+import http.HttpHeaders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.HttpMessage;
+import webserver.HttpRequest;
+import webserver.RequestHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class HttpRequestParser {
-    public HttpRequestParser() {
-    }
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestParser.class);
 
-    public Map<String, String> parseHttpRequest(InputStream in) throws IOException {
-        Map<String, String> messageElement = new HashMap<>();
+    public HttpRequest parseRequestInputStream(InputStream in) throws IOException {
+        Map<String, String> messageInfo = new HashMap<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
         //첫 번째 라인에서 메서드, 경로 추출
         String firstLine = reader.readLine();
         String[] firstLineParts = firstLine.split(" ");
-        messageElement.put("Method", firstLineParts[0]);
-        messageElement.put("Path", firstLineParts[1]);
-        messageElement.put("HTTP version", firstLineParts[2]);
+        messageInfo.put(HttpHeaders.METHOD, firstLineParts[0]);
+        messageInfo.put(HttpHeaders.PATH, firstLineParts[1]);
+        messageInfo.put(HttpHeaders.HTTP_VERSION, firstLineParts[2]);
+
         //다른 헤더 추출
         String line;
         while((line=reader.readLine()) != null && !line.isEmpty()) {
             String[] headerParts = line.split(": ");
             if (headerParts.length == 2) {
-                messageElement.put(headerParts[0], headerParts[1]);
+                messageInfo.put(headerParts[0], headerParts[1]);
             }
         }
 
         // 바디 추출
-        if(messageElement.get("Method").equals("POST")){
-            char[] body = new char[Integer.parseInt(messageElement.get("Content-Length"))];
+        if(messageInfo.get(HttpHeaders.METHOD).equals("POST")){
+            char[] body = new char[Integer.parseInt(messageInfo.get(HttpHeaders.CONTENT_LENGTH))];
             reader.read(body);
-            messageElement.put("Body", new String(body));
+            messageInfo.put("Body", new String(body));
         }
-
-        return messageElement;
+        HttpMessage message = new HttpMessage(messageInfo);
+        return new HttpRequest(message);
     }
+
 
 }
