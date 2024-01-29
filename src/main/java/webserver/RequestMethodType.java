@@ -3,6 +3,8 @@ package webserver;
 import http.constants.HttpHeaders;
 import http.constants.Path;
 import http.constants.StatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileLoader;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ public enum RequestMethodType {
                 return PostType.findByPath(request.getPath()).service(request);
             }
             catch (Exception e){
-                System.out.println("Error while POST: " + e.getMessage());
+                logger.debug("Error while POST: {}", e.getMessage());
                 return get500ErrorMessage(request);
                 //예외 발생하면 서버에러 코드
             }
@@ -32,12 +34,13 @@ public enum RequestMethodType {
                 return GetType.findByPath(request.getPath()).service(request);
             }
             catch (Exception e){
-                System.out.println("Error while GET: " + e.getMessage());
+                logger.debug("Error while POST: {}", e.getMessage());
                 return get500ErrorMessage(request);
             }
         }
     }
     ;
+    private static final Logger logger = LoggerFactory.getLogger(RequestMethodType.class);
 
     private static HttpMessage get500ErrorMessage(HttpMessage request) throws IOException {
         Map<String, String> responseInfo = new HashMap<>();
