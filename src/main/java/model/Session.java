@@ -4,16 +4,16 @@ import java.time.LocalDateTime;
 
 public class Session {
     private String sessionId;
-    private String userId;
+    private User user;
     private LocalDateTime createDate;
     private LocalDateTime expireDate;
     private LocalDateTime lastAccessDate;
 
-    public Session(String sessionId, String userId, LocalDateTime createDate){
+    public Session(String sessionId, User user, LocalDateTime createDate){
         this.sessionId=sessionId;
-        this.userId=userId;
+        this.user=user;
         this.createDate=createDate;
-        this.expireDate=createDate.plusDays(3);
+        this.expireDate=this.createDate.plusSeconds(15);
     }
 
     public String getSessionId(){
@@ -22,6 +22,10 @@ public class Session {
 
     public LocalDateTime getExpireDate(){
         return this.expireDate;
+    }
+
+    public User getUser(){
+        return this.user;
     }
 
 }
