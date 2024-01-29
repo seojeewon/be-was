@@ -11,10 +11,7 @@ public class FileLoader {
     private static final Map<String, String> TYPE_PATH = new HashMap<>();
     private static final String HTML_PATH = "src/main/resources/templates";
 
-    public FileLoader(){
-        this.setStaticPath();
-    }
-    private void setStaticPath(){
+    static {
         TYPE_PATH.put("css", STATIC_PATH);
         TYPE_PATH.put("eot", STATIC_PATH);
         TYPE_PATH.put("ttf", STATIC_PATH);
@@ -27,10 +24,9 @@ public class FileLoader {
         TYPE_PATH.put("ico", STATIC_PATH);
     }
 
-    public byte[] loadFileContent(String requestPath, String mimeType) throws IOException {
+    public static byte[] loadFileContent(String requestPath, String mimeType) throws IOException {
         return Files.readAllBytes(new File(TYPE_PATH.get(mimeType) + requestPath).toPath());
     }
-
 
 
 }
