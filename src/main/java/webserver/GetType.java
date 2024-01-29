@@ -1,6 +1,7 @@
 package webserver;
 
 import http.HttpHeaders;
+import http.Path;
 import http.StatusCode;
 import model.Session;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum GetType implements MethodType{
-    AUTHORIZED_HOME("/index.html"){
+    AUTHORIZED_HOME(Path.HOME){
         @Override
         public HttpMessage service(HttpMessage request) throws IOException{
             //쿠키로 유효한 세션 아이디를 넘겨주는 경우 index.html에 사용자 이름 표시하고 로그인 버튼 없애기
@@ -35,7 +36,7 @@ public enum GetType implements MethodType{
             }
         }
     },
-    LOGIN_USER_LIST("/user/list.html"){
+    LOGIN_USER_LIST(Path.USER_LIST){
         @Override
         public HttpMessage service(HttpMessage request) throws IOException{
             Map<String, String> responseInfo = new HashMap<>();
@@ -60,7 +61,7 @@ public enum GetType implements MethodType{
             } catch (IOException e){    //없는 페이지 요청시 404 에러
                 logger.error("Fault Page Request : {}", request.getPath());
                 responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.NOT_FOUND);
-                body = FileLoader.loadFileContent("/error/not_found.html","html");
+                body = FileLoader.loadFileContent(Path.ERROR_404,"html");
                 return new HttpMessage(responseInfo, body);
             }
             responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.OK);

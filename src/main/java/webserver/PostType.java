@@ -1,6 +1,7 @@
 package webserver;
 
 import http.HttpHeaders;
+import http.Path;
 import http.StatusCode;
 import model.Session;
 import service.UserService;
@@ -19,10 +20,10 @@ public enum PostType implements MethodType{
             responseInfo.put(HttpHeaders.STATUS_CODE, StatusCode.FOUND);
             if(UserService.registerUser(request.getUserInfo())){
                 //회원가입에 성공했을 경우 홈페이지로 리다이렉트
-                responseInfo.put(HttpHeaders.LOCATION, "/index.html");
+                responseInfo.put(HttpHeaders.LOCATION, Path.HOME);
             } else{
                 //이미 존재하는 아이디인 경우 form_fail.html로 리다이렉트
-                responseInfo.put(HttpHeaders.LOCATION, "/user/form_fail.html");
+                responseInfo.put(HttpHeaders.LOCATION, Path.JOIN_FORM_FAIL);
             }
             return new HttpMessage(responseInfo);
         }
@@ -36,11 +37,11 @@ public enum PostType implements MethodType{
             if(UserService.isValidUser(request.getRequestBody())){
                 Session session = UserService.login(request.getLoginDto());
                 //로그인에 성공했을 경우, 세션아이디를 쿠키에 담아 홈페이지로 리다이렉트
-                responseInfo.put(HttpHeaders.LOCATION, "/index.html");
+                responseInfo.put(HttpHeaders.LOCATION, Path.HOME);
                 responseInfo.put(HttpHeaders.SET_COOKIE, session.getSessionId());
             } else{
                 //로그인에 실패한 경우 login_failed.html로 리다이렉트
-                responseInfo.put(HttpHeaders.LOCATION, "/user/login_failed.html");
+                responseInfo.put(HttpHeaders.LOCATION, Path.LOGIN_FAIL);
             }
             return new HttpMessage(responseInfo);
         }
