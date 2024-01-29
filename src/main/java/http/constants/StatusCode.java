@@ -1,8 +1,8 @@
 package http.constants;
 
 public class StatusCode {
-    public static String OK = "200 OK";
-    public static String FOUND = "302 FOUND";
-    public static String NOT_FOUND = "404 Not Found";
-    public static String INTERNAL_SERVER_ERROR ="500 Internal Server Error";
+    public static final String OK = "200 OK";
+    public static final String FOUND = "302 FOUND";
+    public static final String NOT_FOUND = "404 Not Found";
+    public static final String INTERNAL_SERVER_ERROR ="500 Internal Server Error";
 }
