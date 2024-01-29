@@ -1,4 +1,4 @@
-package http;
+package http.constants;
 
 public class StatusCode {
     public static String OK = "200 OK";

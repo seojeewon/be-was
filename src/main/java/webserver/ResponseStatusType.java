@@ -1,7 +1,7 @@
 package webserver;
 
-import http.HttpHeaders;
-import http.StatusCode;
+import http.constants.HttpHeaders;
+import http.constants.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

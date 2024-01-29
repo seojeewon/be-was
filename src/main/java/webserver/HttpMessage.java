@@ -1,7 +1,7 @@
 package webserver;
 
 import dto.LoginInfo;
-import http.HttpHeaders;
+import http.constants.HttpHeaders;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

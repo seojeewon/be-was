@@ -1,4 +1,4 @@
-package http;
+package http.constants;
 
 public class Path {
     public static final String HOME = "/index.html";

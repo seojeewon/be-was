@@ -1,8 +1,8 @@
 package webserver;
 
-import http.HttpHeaders;
-import http.Path;
-import http.StatusCode;
+import http.constants.HttpHeaders;
+import http.constants.Path;
+import http.constants.StatusCode;
 import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

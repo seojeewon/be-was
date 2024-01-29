@@ -1,11 +1,10 @@
 package utils;
 
-import http.HttpHeaders;
+import http.constants.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.HttpMessage;
 import webserver.HttpRequest;
-import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
