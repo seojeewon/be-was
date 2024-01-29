@@ -22,7 +22,7 @@ public class HtmlEditor {
         String homePage = new String(homeHtml);
         //로그인 버튼 삭제
         homePage = homePage.replace(LOGIN_BUTTON, "");
-        homePage = homePage.replace("<span class=\"user-name\"></span>", "<span class=\"user-name\">" + userName + "</span>");
+        homePage = homePage.replace("<span class=\"user-name\"></span>", "<span class=\"user-name\">" + userName + "님" + "</span>");
         return homePage.getBytes();
     }
 
@@ -40,7 +40,7 @@ public class HtmlEditor {
         logger.debug("session number : {}", sessionList.size());
         for (int number = 1; number < sessionList.size(); number++) {
             String userLine = LIST_FRAME;
-            User user = sessionList.get(number-1).getUser();
+            User user = sessionList.get(number - 1).getUser();
             userLine = userLine.replace("number", Integer.toString(number));
             userLine = userLine.replace("userId", user.getUserId());
             userLine = userLine.replace("userName", user.getName());
