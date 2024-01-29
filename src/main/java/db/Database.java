@@ -5,8 +5,11 @@ import com.google.common.collect.Maps;
 import model.Session;
 import model.User;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Database {
     private static Map<String, User> users = Maps.newHashMap();
@@ -30,5 +33,11 @@ public class Database {
 
     public static Session findSessionById(String sessionId){
         return sessions.get(sessionId);
+    }
+
+    public static List<Session> findAllValidSession(){
+        return (List<Session>) sessions.values().stream()
+                .filter(session -> session.getExpireDate().isBefore(LocalDateTime.now()))
+                .collect(Collectors.toList());
     }
 }
