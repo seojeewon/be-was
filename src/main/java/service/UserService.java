@@ -4,12 +4,16 @@ import db.Database;
 import dto.LoginInfo;
 import model.Session;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.HttpMessage;
+import webserver.RequestHandler;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     public static boolean registerUser(User newUser){
         //이미 존재하는 id일 경우
         if(isJoinedUser(newUser)){
