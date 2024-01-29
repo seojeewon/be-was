@@ -29,4 +29,8 @@ public class Session {
         return this.user;
     }
 
+    @Override
+    public String toString() {
+        return "Session ID : " + sessionId + "[User: " + user.getUserId() + ", createDate: " + createDate + "]";
+    }
 }
