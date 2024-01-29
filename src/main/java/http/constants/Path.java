@@ -1,6 +1,8 @@
 package http.constants;
 
 public class Path {
+    public static final String STATIC_PATH = "src/main/resources/static";
+    public static final String TEMPLATES_PATH = "src/main/resources/templates";
     public static final String HOME = "/index.html";
     public static final String JOIN_FORM = "/user/form.html";
     public static final String JOIN_FORM_FAIL = "/user/form_failed.html";
