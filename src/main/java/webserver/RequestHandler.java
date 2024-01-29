@@ -31,11 +31,6 @@ public class RequestHandler implements Runnable {
             HttpMessage responseMessage = RequestMethodType.valueOf(httpRequest.getMessage().getMethod()).operator(httpRequest);
             HttpResponse response = new HttpResponse(responseMessage);
             logger.debug(response.toString());
-//            dos.writeBytes("HTTP1.1 200 OK \r\n");
-//            dos.writeBytes("Content-Type: "+responseMessage.getAccept()+" \r\n");
-//            dos.writeBytes("Content-Length: " + responseMessage.getResponseBody().length + "\r\n\r\n");
-//            dos.write(responseMessage.body);
-//            dos.flush();
             ResponseStatusType.findByStatus(responseMessage.getStatusCode()).writer(dos, response);
 
         } catch (IOException e) {
