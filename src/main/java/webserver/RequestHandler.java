@@ -3,20 +3,15 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
-import dto.Login;
-import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileLoader;
 import utils.HttpRequestParser;
-import utils.HttpResponseSender;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final UserService userService = new UserService();
     private Socket connection;
-    private static String USER_CREATE_PATH = "/user/create";
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -30,35 +25,18 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             HttpRequestParser parser = new HttpRequestParser();
-            HttpRequest httpRequest = new HttpRequest(parser.parseHttpRequest(in));
-            HttpResponseSender responseSender = new HttpResponseSender();
+            HttpRequest httpRequest = parser.parseRequestInputStream(in);
             logger.debug(httpRequest.toString());
 
-            //TODO: 회원가입과 로그인 분리
-            String path = httpRequest.getPath();
-            if(httpRequest.getMethod().equals("POST")){
-                if(path.contains(USER_CREATE_PATH)){    //회원가입
-                    userService.registerUser(httpRequest.toUserDto());
-                    logger.debug("New User Registered!");
-                    responseSender.redirectToHomePage(dos);
-                }
-                else{
-                    Login loginInfo = httpRequest.getLoginInfo();
-                    if(userService.isValidUser(loginInfo)){  //로그인 성공
-                        Session session = userService.login(loginInfo);
-                        //리다이렉션
-                        responseSender.redirectToHomePage(dos, session.getSessionId(), session.getExpireDate());
-                    }
-                    else{   //로그인 실패
-                        logger.debug("{} 로그인 실패", loginInfo.getUserId());
-                        responseSender.redirectToLoginFailedPage(dos);
-                    }
-                }
-            }
-            else{
-                byte[] body = new FileLoader().loadFileContent(path, httpRequest.getResponseMimeType());
-                responseSender.sendHttpResponse(dos, body.length, body, httpRequest.getResponseMimeType());
-            }
+            HttpMessage responseMessage = RequestMethodType.valueOf(httpRequest.getMessage().getMethod()).operator(httpRequest);
+            HttpResponse response = new HttpResponse(responseMessage);
+            logger.debug(response.toString());
+//            dos.writeBytes("HTTP1.1 200 OK \r\n");
+//            dos.writeBytes("Content-Type: "+responseMessage.getAccept()+" \r\n");
+//            dos.writeBytes("Content-Length: " + responseMessage.getResponseBody().length + "\r\n\r\n");
+//            dos.write(responseMessage.body);
+//            dos.flush();
+            ResponseStatusCode.findByStatus(responseMessage.getStatusCode()).writer(dos, response);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
